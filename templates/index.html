@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nedbank Transaction Volumetrics | AI Forecasting</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">
+            <span class="logo-mark"></span>
+            <div>
+                <h1>Nedbank VolumeAI</h1>
+                <span style="font-size: 0.75rem; color: var(--accent); font-weight: 600;">Developed By Mashaba Hlulani Charles</span>
+            </div>
+        </div>
+        <div class="nav-links">
+            <a href="#" id="nav-dashboard" class="active">Dashboard</a>
+            <a href="#" id="nav-models">Models & Confidence</a>
+        </div>
+    </nav>
+
+    <!-- DASHBOARD VIEW -->
+    <main class="dashboard" id="view-dashboard">
+        <header class="dashboard-header">
+            <div>
+                <h2>Customer Transaction Forecasting</h2>
+                <p>Predicting 3-Month Trajectories with High Confidence</p>
+            </div>
+            
+            <div class="controls">
+                <label for="user-select">Select Customer:</label>
+                <select id="user-select">
+                    <option value="">Loading all 3584 customers...</option>
+                </select>
+                <button id="analyze-btn" class="btn primary-btn">Forecast Future</button>
+            </div>
+        </header>
+
+        <section id="result-view" class="results-grid hidden">
+            <div class="card prediction-card">
+                <h3>Predicted Transactions (Next 3 Months)</h3>
+                <div class="prediction-value">
+                    <span id="pred-count">0</span>
+                    <span class="pred-label">Txns</span>
+                </div>
+                <div class="prediction-context">
+                    <p>Total past transactions context: <strong id="past-txns">0</strong></p>
+                    <p style="margin-top:0.5rem; display:inline-block; padding: 0.3rem 0.6rem; border-radius: 4px; background: rgba(34, 211, 238, 0.1); color: var(--accent); border: 1px solid rgba(34, 211, 238, 0.3);">
+                        Model Confidence: <strong id="pred-confidence">--</strong> (±<span id="pred-margin">0</span> txns)
+                    </p>
+                    <div id="actual-val-container" class="hidden" style="margin-top:1rem; padding: 0.5rem 1rem; border-radius: 8px; background: rgba(0, 176, 107, 0.2); border: 1px solid var(--primary-light);">
+                        <p style="color: var(--primary-light); font-weight: 600;">Ground Truth (Train Set): <strong id="actual-val-count" style="font-size:1.2rem; color: #fff;">0</strong></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card demo-card full-width">
+                <h3>Customer Demographics & Profile</h3>
+                <div class="demo-grid" id="demo-grid">
+                    <!-- Javascript will inject data here -->
+                </div>
+            </div>
+
+            <div class="card stats-card full-width">
+                <h3>Advanced Behavioral Indicators</h3>
+                <div class="demo-grid" id="stats-grid">
+                    <!-- Javascript will inject advanced stats here -->
+                </div>
+            </div>
+
+            <div class="card chart-card full-width">
+                <h3>Historical Transaction Volume</h3>
+                <div class="chart-container">
+                    <canvas id="historyChart"></canvas>
+                </div>
+            </div>
+        </section>
+        
+        <div id="loading" class="loading-state hidden">
+            <div class="spinner"></div>
+            <p>Analyzing behavioral signals & querying Random Forest...</p>
+        </div>
+        <div id="error" class="error-state hidden">
+            <p id="error-msg"></p>
+        </div>
+    </main>
+
+    <!-- MODELS VIEW -->
+    <main class="dashboard hidden" id="view-models">
+        <header class="dashboard-header">
+            <div>
+                <h2>AI Model Architecture</h2>
+                <p>Behind the scenes intelligence & Feature tracking</p>
+            </div>
+            <button id="refresh-model-btn" class="btn primary-btn" style="background: rgba(30, 41, 59, 1); border: 1px solid var(--glass-border); color: white;">Refresh Model Stats</button>
+        </header>
+
+        <section class="results-grid">
+            <div class="card full-width" style="display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                    <h3 style="color:var(--primary-light);">Architecture Overview</h3>
+                    <p id="model-type" style="font-size:1.5rem; font-weight:800; color:white;">--</p>
+                    <p id="model-params" style="color:var(--text-muted); margin-top:0.5rem;">--</p>
+                </div>
+                <div style="text-align:right;">
+                    <h3 style="color:var(--accent);">Validation Score (RMSLE)</h3>
+                    <p id="model-rmsle" style="font-size:2.5rem; font-weight:800; color:white;">--</p>
+                </div>
+            </div>
+            <div class="card full-width">
+                <h3 style="margin-bottom: 2rem;">Top 10 Feature Importances</h3>
+                <div class="chart-container" style="height: 350px;">
+                    <canvas id="featureChart"></canvas>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
